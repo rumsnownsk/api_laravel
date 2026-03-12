@@ -8,39 +8,54 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class PostController extends Controller
+class PostController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show'])
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        // http://localhost:8000/api/v1/posts?tags%5B%5D=1&tags%5B%5D=2&tags%5B%5D=3&topic=2
         // Получаем параметры из запроса
-        $tags = $request->input('tags', []);
         $topicId = $request->input('topic');
-
-//        return response()->json($request->all());
+        $tags = $request->input('tags', []);
 
         // Начинаем построение запроса к модели Post
         $query = Post::with(['topic', 'tags']);
 
         // Фильтрация по тегам (если переданы)
-        if (!empty($tags)) {
-            $query->whereHas('tags', function ($q) use ($tags) {
-                $q->whereIn('id', $tags); // Предполагаем, что теги передаются по ID
-            });
+        try {
+            if (!empty($tags)) {
+                $query->whereHas('tags', function ($q) use ($tags) {
+                    $q->whereIn('id', $tags); // Предполагаем, что теги передаются по ID
+                });
+            }
+
+            // Фильтрация по теме (если передана)
+            if ($topicId) {
+                $query->where('topic_id', $topicId);
+            }
+        } catch (\Exception $exception ){
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage('hehe')
+            ]);
         }
 
-        // Фильтрация по теме (если передана)
-        if ($topicId) {
-            $query->where('topic_id', $topicId);
-        }
 
+        // TODO добавить пагинациюб
         // Добавляем пагинацию (10 постов на страницу)
         $posts = $query->get();
 
@@ -54,9 +69,6 @@ class PostController extends Controller
             ]
         ]);
     }
-//        $posts = $query->get();
-//        return PostResource::collection($posts);
-//    }
 
     /**
      * Store a newly created resource in storage.
@@ -139,9 +151,9 @@ class PostController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => new PostResource($post)
-            ], 204);
+            ], 200);
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -166,10 +178,4 @@ class PostController extends Controller
             'message' => 'Post HAS BEEN DELETED successfully'
         ]);
     }
-
-//    public function postsByTopicId($topicId): AnonymousResourceCollection
-//    {
-//        $posts = Post::query()->where('topic_id', $topicId)->get();
-//        return PostResource::collection($posts);
-//    }
 }
