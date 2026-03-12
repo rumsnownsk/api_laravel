@@ -23,7 +23,13 @@ return [
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Content-Type', 'Authorization', 'X-Requested-With'],
+    'allowed_headers' => [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'X-XSRF-TOKEN',    // обязательно для CSRF
+        'X-CSRF-TOKEN'    // альтернативное имя
+    ],
 
     'exposed_headers' => [],
 
