@@ -88,11 +88,4 @@ class TagController extends Controller
         }
 
     }
-
-//    public function tagsByTopicId($topicId)
-//    {
-//        $tags = Topic::with('tags')->find($topicId);
-//        if (!$topicId) return response()->json(['error' => 'Topic not found'], 404);
-//        return TagResource::collection($tags->tags);
-//    }
 }
