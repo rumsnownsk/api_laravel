@@ -20,7 +20,7 @@ class TopicResource extends JsonResource
             'name'=>$this->name,
             'slug'=>$this->slug,
             'description'=>$this->description,
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'posts_count' => $this->whenCounted('posts'), // Автоматически подставляет posts_count, если загружен через withCount()
             'created_at' => $this->created_at?->diffForHumans() ?? 'not set',
             'updated_at' => $this->updated_at?->diffForHumans() ?? 'not set',
         ];
