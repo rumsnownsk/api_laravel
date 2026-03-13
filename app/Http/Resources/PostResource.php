@@ -23,7 +23,7 @@ class PostResource extends JsonResource
                     'id' => $this->topic->id,
                     'name' => $this->topic->name
                 ] : null,
-
+            'description' => $this->description,
             'image' => $this->image ?? 'default-post.jpg',
             'tags' => $this->tags->map(fn($tag) => [
                 'id' => $tag->id,
