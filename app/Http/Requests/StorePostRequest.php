@@ -11,7 +11,7 @@ class StorePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth('sanctum')->check();
     }
 
     /**
@@ -25,6 +25,7 @@ class StorePostRequest extends FormRequest
             'title' => 'required|max:255|string',
             'body' => 'required|string',
             'topic_id' => 'required|integer|exists:topics,id',
+            'description' => 'string|nullable|max:65535',
             'tag_ids' => 'nullable|array',
             'tag_ids.*' => 'exists:tags,id'
         ];

@@ -16,7 +16,7 @@ class TopicController extends Controller
      */
     public function index()
     {
-        $topics = Topic::select('id', 'name', 'slug', 'description')
+        $topics = Topic::select('id', 'name', 'slug','image', 'description')
             ->withCount('posts')
 //            ->orderByDesc('posts_count')
             ->get();

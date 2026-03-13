@@ -18,9 +18,8 @@ return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'], // Пути, к которым применяется CORS
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешённые HTTP-методы
-    
-//    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
-    'allowed_origins' => ['https://iocode.ru'],
+
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
 
     'allowed_origins_patterns' => [],
 
