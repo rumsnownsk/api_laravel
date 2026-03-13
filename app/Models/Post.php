@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Post extends Model
 {
     public $table = 'posts';
-    public $fillable = ['title', 'body', 'slug', 'topic_id', 'image'];
+    public $fillable = ['title', 'body', 'slug', 'topic_id', 'image', 'description'];
 
     public function topic(): BelongsTo
     {
@@ -24,14 +24,14 @@ class Post extends Model
     public function getCreatedAtFormattedAttribute(): string
     {
         return $this->created_at
-            ? $this->created_at->format('d-m-Y H:i:s')
+            ? $this->created_at->format('d-m-Y H:i')
             : 'not set';
     }
 
     public function getUpdatedAtFormattedAttribute(): string
     {
         return $this->updated_at
-            ? $this->updated_at->format('d-m-Y H:i:s')
+            ? $this->updated_at->format('d-m-Y')
             : 'not set';
     }
 }

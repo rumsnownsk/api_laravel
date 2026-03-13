@@ -13,7 +13,7 @@ class UpdateTopicRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth('sanctum')->check();
     }
 
     /**
@@ -23,16 +23,12 @@ class UpdateTopicRequest extends FormRequest
      */
     public function rules(): array
     {
-        // ID топика уже загружен в контроллере через Route Model Binding
-//        $topicId = $this->route('topic'); // Получаем модель через Route Model Binding
-
         return [
             'name' => [
                 'required',
                 'string',
                 'min:3',
                 'max:255',
-//                Rule::unique('topics', 'name')->ignore($topicId)
             ],
             'slug' => ['required'],
             'description' => ['nullable', 'string'] // Добавьте это поле

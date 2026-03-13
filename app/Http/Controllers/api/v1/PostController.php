@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
@@ -84,6 +85,7 @@ class PostController extends Controller implements HasMiddleware
                     'title' => $validated['title'],
                     'body' => $validated['body'],
                     'topic_id' => $validated['topic_id'],
+                    'description' => $validated['description'],
                     'slug' => Str::slug($validated['title'])
                 ]);
 //                dd($post);
@@ -123,12 +125,12 @@ class PostController extends Controller implements HasMiddleware
 
     /**
      * Update the specified resource in storage.
-     * @param StorePostRequest $request
+     * @param UpdatePostRequest $request
      * @param string $id
-     * @param $post
+     * @string $id
      * @return JsonResponse
      */
-    public function update(StorePostRequest $request, string $id): JsonResponse
+    public function update(UpdatePostRequest $request, string $id): JsonResponse
     {
         try {
             $post = Post::query()->findOrFail($id);
@@ -141,6 +143,7 @@ class PostController extends Controller implements HasMiddleware
                     'title' => $validated['title'],
                     'body' => $validated['body'],
                     'topic_id' => $validated['topic_id'],
+                    'description' => $validated['description'],
                     'slug' => Str::slug($validated['title'])
                 ]);
                 if (!empty($validated['tag_ids'])) {
@@ -153,11 +156,18 @@ class PostController extends Controller implements HasMiddleware
                 'data' => new PostResource($post)
             ], 200);
 
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database error when updating post: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ]);
+                'message' => 'Ошибка базы данных'
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error('Error when updating post: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Произошла ошибка при обновлении поста'
+            ], 500);
         }
     }
 
