@@ -19,9 +19,12 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешённые HTTP-методы
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
+//    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
+    'allowed_origins' => [],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '/^https?:\/\/([a-zA-Z0-9-]+\.)?iocode\.ru$/'
+    ],
 
     'allowed_headers' => [
         'Content-Type',

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\api\v1\AuthController;
+use App\Http\Controllers\api\v1\ImportController;
+use App\Http\Controllers\api\v1\MessageController;
 use App\Http\Controllers\api\v1\PostController;
 use App\Http\Controllers\api\v1\TopicController;
 use App\Http\Controllers\api\v1\TagController;
@@ -27,6 +29,15 @@ Route::middleware('api')->prefix('v1')->group(function () {
     Route::get('user', function (Request $request) {
         return $request->user();
     })->middleware('auth:sanctum');
+
+
+    Route::post('message', [MessageController::class, 'store']);
+
+    /**
+     * РОУТ ДЛЯ ImportController
+     */
+    Route::get('import/{type}', [ImportController::class, 'importData'])
+    ->where('type', 'sales|orders|stocks|incomes');
 });
 
 
