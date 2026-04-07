@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\api\v1\AuthController;
 use App\Http\Controllers\api\v1\ImportController;
+use App\Http\Controllers\api\v1\MessageController;
 use App\Http\Controllers\api\v1\PostController;
-use App\Http\Controllers\api\v1\SaleController;
 use App\Http\Controllers\api\v1\TopicController;
 use App\Http\Controllers\api\v1\TagController;
 use Illuminate\Http\Request;
@@ -31,6 +31,7 @@ Route::middleware('api')->prefix('v1')->group(function () {
     })->middleware('auth:sanctum');
 
 
+    Route::post('message', [MessageController::class, 'store']);
 
     /**
      * РОУТ ДЛЯ ImportController

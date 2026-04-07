@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75eca81a46ef53cc78ba667083159c64",
+    "content-hash": "30415538bc1a4cdbb810c15d1ada1ab5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3801,7 +3801,6 @@
                 "terminal"
             ],
             "support": {
-
                 "source": "https://github.com/symfony/console/tree/v7.4.7"
             },
             "funding": [
@@ -3822,7 +3821,6 @@
                     "type": "tidelift"
                 }
             ],
-
             "time": "2026-03-06T14:06:20+00:00"
         },
         {
@@ -9723,5 +9721,5 @@
         "php": "^8.3"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
