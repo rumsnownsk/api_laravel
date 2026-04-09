@@ -20,10 +20,16 @@ return [
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешённые HTTP-методы
 
 //    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
-    'allowed_origins' => [],
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:3000'), // Основной домен из .env
+        'https://iocode.ru', // Основной продакшен‑домен
+        'http://localhost:*', // Локальная разработка
+    ],
 
     'allowed_origins_patterns' => [
-        '/^https?:\/\/([a-zA-Z0-9-]+\.)?iocode\.ru$/'
+//        '/^https?:\/\/([a-zA-Z0-9-]+\.)?iocode\.ru$/',
+        '^https?://([a-z0-9-]+\.)?iocode\.ru$'
+
     ],
 
     'allowed_headers' => [
