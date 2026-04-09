@@ -217,7 +217,7 @@ class MessageController extends Controller
             ['fingerprint_hash' => $fingerprintHash],
             [
                 'name'=>$ip,
-                'email'=>'none_email',
+                'email'=>null,
                 'password'=>'none_password',
                 'ip_address' => $ip,
                 'user_agent' => $userAgent,
