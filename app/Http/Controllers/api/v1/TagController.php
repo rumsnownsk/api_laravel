@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Http\Resources\TagResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\Topic;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,19 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::query()->get();
+        $topicId = $request->input('topicId');
+        $query = Tag::query();
+
+        if ($topicId) {
+            $query->whereHas('posts', function ($q) use ($topicId) {
+                $q->whereHas('topic', function ($tq) use ($topicId) {
+                    $tq->where('id', $topicId);
+                });
+            });
+        }
+        $tags = $query->get();
         return TagResource::collection($tags);
     }
 

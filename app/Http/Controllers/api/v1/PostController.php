@@ -29,30 +29,27 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
-        // Получаем параметры из запроса
         $topicId = $request->input('topic');
         $tags = $request->input('tags', []);
 
-        // Начинаем построение запроса к модели Post
-        $query = Post::with(['topic', 'tags']);
+        $query = Post::select('posts.*')
+            ->with(['topic', 'tags']);
 
-        // Фильтрация по тегам (если переданы)
-        try {
-            if (!empty($tags)) {
-                $query->whereHas('tags', function ($q) use ($tags) {
-                    $q->whereIn('id', $tags); // Предполагаем, что теги передаются по ID
-                });
-            }
+        if (!empty($tags)) {
+            $query->join('post_tag', 'posts.id', '=', 'post_tag.post_id')
+                ->whereIn('post_tag.tag_id', $tags);
 
-            // Фильтрация по теме (если передана)
-            if ($topicId) {
-                $query->where('topic_id', $topicId);
+            // Если нужно, чтобы пост имел ВСЕ указанные теги
+            if (count($tags) > 1) {
+                $query->groupBy('posts.id')
+                    ->havingRaw('COUNT(DISTINCT post_tag.tag_id) = ?', [count($tags)]);
+            } else {
+                $query->groupBy('posts.id');
             }
-        } catch (\Exception $exception ){
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage('hehe')
-            ]);
+        }
+
+        if ($topicId) {
+            $query->where('posts.topic_id', $topicId);
         }
 
 
